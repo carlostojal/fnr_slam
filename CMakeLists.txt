@@ -8,7 +8,9 @@ find_package(Threads REQUIRED)
 set(target_includes include)
 include_directories(${target_includes} ${OpenCV_INCLUDE_DIRS} ${Eigen3_INCLUDE_DIRS} ${Threads_INCLUDE_DIRS})
 set(target_sources
+	src/FNRSLAM.cpp
 	src/data_structures/Graph.cpp
+	src/data_structures/Node.cpp
 )
 
 add_library(fnr_slam STATIC ${target_sources})
