@@ -17,6 +17,8 @@ class VideoStream {
 		bool colorImageWasSet = false;
 		cv::Mat lastDepthImage;
 		bool depthImageWasSet = false;
+		Eigen::Matrix3d intrinsics;
+		bool intrinsicsWasSet = false;
 
 	public:
 		VideoStream();
@@ -27,6 +29,8 @@ class VideoStream {
 		void addColorImage(cv::Mat img);
 		cv::Mat getLastDepthImage();
 		void addDepthImage(cv::Mat img);
+		Eigen::Matrix3d getIntrinsics();
+		void setIntrinsics(Eigen::Matrix3d K);
 
 };
 

@@ -12,7 +12,6 @@ set(target_sources
 	src/VideoStream.cpp
 	src/data_structures/Graph.cpp
 	src/data_structures/Node.cpp
-	src/data_structures/HashTable.cpp
 )
 
 add_library(fnr_slam STATIC ${target_sources})

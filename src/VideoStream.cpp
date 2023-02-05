@@ -45,3 +45,15 @@ void VideoStream::addDepthImage(cv::Mat img) {
 	this->depthImageWasSet = true;
 }
 
+Eigen::Matrix3d VideoStream::getIntrinsics() {
+	if(this->intrinsicsWasSet)
+		return this->intrinsics;
+	// TODO: throw an exception
+	return this->intrinsics;
+}
+
+void VideoStream::setIntrinsics(Eigen::Matrix3d K) {
+	this->intrinsics = K;
+	this->intrinsicsWasSet = true;
+}
+
