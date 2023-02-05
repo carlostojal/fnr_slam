@@ -9,17 +9,15 @@ Graph::Graph(time_t max_node_age) {
 }
 
 Graph::~Graph() {
-	// first case: the graph is empty
-	if(this->head->next == this->head) {
-		delete this->head;
-	} else {
-		Node *old_head = this->head; // only used to keep referece of the end of the graph
-		Node *cur = this->head->next;
-		while(cur != old_head) {
-			delete cur->prev;
-		}
-		// TODO: this leaves a memory leak
+	Node *cur = this->head->next;
+	Node *old_head = this->head; // preserve the head pointer
+	while(cur->next != old_head) {
+		// delete the previous of the current
+		delete cur->prev;
+		cur = cur->next; // go to the next
 	}
+	// reached the end of the graph, delete the current
+	delete cur;
 }
 
 void Graph::addNode(Node *node) {
