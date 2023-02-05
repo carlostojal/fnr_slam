@@ -1,7 +1,7 @@
 #include <fnr_slam/FNRSLAM.h>
 
-FNRSLAM::FNRSLAM() {
-	this->graph = new Graph();
+FNRSLAM::FNRSLAM(time_t max_node_age) {
+	this->graph = new Graph(max_node_age);
 }
 
 FNRSLAM::~FNRSLAM() {

@@ -10,15 +10,21 @@
 class Node {
 	
 	private:
-		Node *prev = nullptr;
-		Node *next = nullptr;
 		time_t timestamp;
-		Eigen::Matrix3d transformToPrev; // geometric transformation between this node and the previous
+		Eigen::Affine3d transformToPrev; // geometric transformation between this node and the previous
+		Eigen::Affine3d transformToStart; // geometric transformation between this node and the first of the graph
 		cv::Mat lastImage; // the last image
 
 
 	public:
-		Node(Node *prev);
+		Node();
+		Node *prev = nullptr;
+		Node *next = nullptr;
+
+		void setTransformToPrev(Eigen::Affine3d tf);
+		Eigen::Affine3d getTransformToPrev();
+		void setTransformToStart(Eigen::Affine3d tf);
+		Eigen::Affine3d getTransformToStart();
 };
 
 #endif

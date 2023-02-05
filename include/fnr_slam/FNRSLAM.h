@@ -19,7 +19,7 @@ class FNRSLAM {
 		std::unordered_map<std::string,VideoStream*> streams; // keep a stream object for each frame id
 
 	public:
-		FNRSLAM();
+		FNRSLAM(time_t max_node_age);
 		~FNRSLAM();
 		void setCameraTf(std::string frame_id, Eigen::Affine3d tf);
 		void setCameraIntrinsics(std::string frame_id, Eigen::Matrix3d intrinsics);
