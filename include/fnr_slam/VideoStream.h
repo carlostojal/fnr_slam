@@ -5,6 +5,7 @@
 #include <opencv2/opencv.hpp>
 #include <cstdint>
 #include <vector>
+#include <stdexcept>
 
 // this class defines a video stream
 // a video stream is, pretty much, a camera

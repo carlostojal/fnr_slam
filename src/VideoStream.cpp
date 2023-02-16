@@ -8,49 +8,50 @@ fnr_slam::VideoStream::VideoStream() {
 
 Eigen::Matrix<double, 3, 4> fnr_slam::VideoStream::computeProjectionMatrix() {
 	// both the K and and [R|t] need to be defined
-	if(this->extrinsicWasSet && this->intrinsicWasSet)
+	if(this->extrinsicWasSet && this->intrinsicWasSet) {
 		this->projection = this->intrinsic * this->extrinsic;
+		return this->projection;
+	}
+	throw std::runtime_error("The intrinsic or the extrinsic matrix is missing to calculate the projection matrix!");
 }
 
 cv::Mat fnr_slam::VideoStream::computeHomographyMatrix() {
 
+	if(!this->colorImageWasSet)
+		throw std::runtime_error("Color image not received yet!");
+
 	// the perspective image must be set to compute the homography
-	if(this->colorImageWasSet) {
-		this->computeProjectionMatrix();
+	this->computeProjectionMatrix();
 
-		// populate a vector with the corners of the output image
-		cv::Size s = this->lastColorImage.size();
-		std::vector<cv::Point2f> output_corners = {
-			cv::Point2f(0,0),
-			cv::Point2f(s.width, 0),
-			cv::Point2f(s.width, s.height),
-			cv::Point2f(0, s.height)
-		};
+	// populate a vector with the corners of the output image
+	cv::Size s = this->lastColorImage.size();
+	std::vector<cv::Point2f> output_corners = {
+		cv::Point2f(0,0),
+		cv::Point2f(s.width, 0),
+		cv::Point2f(s.width, s.height),
+		cv::Point2f(0, s.height)
+	};
 
-		std::vector<cv::Point2f> input_corners;
+	std::vector<cv::Point2f> input_corners;
 
-		// calculate the input corners from the input corners
-		// using the projection matrix inverse
-		Eigen::MatrixXd P_inv = this->projection.inverse();
-		cv::Mat P_inv_cv(4, 3, CV_64F);
-		// copy the eigen matrix to the opencv matrix
-		# pragma omp parallel for
-		for(uint8_t i = 0; i < 4; i++) {
-			double *rowPtr = P_inv_cv.ptr<double>(i);
-			for(uint8_t j = 0; j < 3; j++) {
-				rowPtr[j] = P_inv(i,j);
-			}
+	// calculate the input corners from the input corners
+	// using the projection matrix inverse
+	Eigen::MatrixXd P_inv = this->projection.inverse();
+	cv::Mat P_inv_cv(4, 3, CV_64F);
+	// copy the eigen matrix to the opencv matrix
+	# pragma omp parallel for
+	for(uint8_t i = 0; i < 4; i++) {
+		double *rowPtr = P_inv_cv.ptr<double>(i);
+		for(uint8_t j = 0; j < 3; j++) {
+			rowPtr[j] = P_inv(i,j);
 		}
-		cv::perspectiveTransform(output_corners, input_corners, P_inv_cv);
-
-		// compute the homography matrix from the transformation of the corners
-		cv::Mat H = cv::findHomography(input_corners, output_corners);
-
-		return H;
-
 	}
+	cv::perspectiveTransform(output_corners, input_corners, P_inv_cv);
 
-	// TODO: throw an exception
+	// compute the homography matrix from the transformation of the corners
+	cv::Mat H = cv::findHomography(input_corners, output_corners);
+
+	return H;
 
 }
 
@@ -58,8 +59,7 @@ Eigen::Matrix<double, 3, 4> fnr_slam::VideoStream::getExtrinsic() {
 	if(this->extrinsicWasSet) {
 		return this->extrinsic;
 	}
-	// TODO: throw an exception
-	return this->extrinsic;
+	throw std::runtime_error("Extrinsic matrix not set!");
 }
 
 void fnr_slam::VideoStream::setExtrinsic(Eigen::Matrix<double, 3, 4> Rt) {
@@ -72,8 +72,7 @@ cv::Mat fnr_slam::VideoStream::getLastColorImage() {
 	if(this->colorImageWasSet) {
 		return this->lastColorImage;
 	}
-	// TODO: throw an exception
-	return this->lastColorImage;
+	throw std::runtime_error("Color image not received!");
 }
 
 void fnr_slam::VideoStream::addColorImage(cv::Mat img) {
@@ -85,8 +84,7 @@ cv::Mat fnr_slam::VideoStream::getLastDepthImage() {
 	if(this->depthImageWasSet) {
 		return this->lastDepthImage;
 	}
-	// TODO: throw an exception
-	return this->lastDepthImage;
+	throw std::runtime_error("Depth image not received!");
 }
 
 void fnr_slam::VideoStream::addDepthImage(cv::Mat img) {
@@ -97,8 +95,7 @@ void fnr_slam::VideoStream::addDepthImage(cv::Mat img) {
 Eigen::Matrix3d fnr_slam::VideoStream::getIntrinsic() {
 	if(this->intrinsicWasSet)
 		return this->intrinsic;
-	// TODO: throw an exception
-	return this->intrinsic;
+	throw std::runtime_error("Intrinsic matrix not set!");
 }
 
 void fnr_slam::VideoStream::setIntrinsic(Eigen::Matrix3d K) {
