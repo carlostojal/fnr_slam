@@ -32,6 +32,7 @@ class VideoStream {
 		Eigen::Matrix3d getIntrinsics();
 		void setIntrinsics(Eigen::Matrix3d K);
 
+		cv::Mat getLastTopView();
 };
 
 #endif

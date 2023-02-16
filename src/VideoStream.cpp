@@ -57,3 +57,8 @@ void VideoStream::setIntrinsics(Eigen::Matrix3d K) {
 	this->intrinsicsWasSet = true;
 }
 
+cv::Mat VideoStream::getLastTopView() {
+	// TODO: perspective transform
+	return lastColorImage;
+}
+
