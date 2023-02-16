@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <unordered_map>
+#include <memory>
 #include <opencv2/opencv.hpp>
 #include <eigen3/Eigen/Dense>
 #include <fnr_slam/VideoStream.h>
@@ -15,8 +16,8 @@
 class FNRSLAM {
 
 	private:
-		Graph *graph;
-		std::unordered_map<std::string,VideoStream*> streams; // keep a stream object for each frame id
+		std::shared_ptr<Graph> graph = nullptr;
+		std::unordered_map<std::string,std::shared_ptr<VideoStream>> streams; // keep a stream object for each frame id
 
 	public:
 		FNRSLAM(time_t max_node_age);

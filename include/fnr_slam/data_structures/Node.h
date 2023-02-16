@@ -2,6 +2,7 @@
 #define NODE_H_
 
 #include <ctime>
+#include <memory>
 #include <opencv2/opencv.hpp>
 #include <eigen3/Eigen/Dense>
 
@@ -18,8 +19,8 @@ class Node {
 
 	public:
 		Node();
-		Node *prev = nullptr;
-		Node *next = nullptr;
+		std::shared_ptr<Node> prev = nullptr;
+		std::shared_ptr<Node> next = nullptr;
 
 		void setTransformToPrev(Eigen::Affine3d tf);
 		Eigen::Affine3d getTransformToPrev();
