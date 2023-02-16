@@ -11,13 +11,13 @@
 class VideoStream {
 
 	private:
-		Eigen::Affine3d tfToBase;
+		Eigen::Affine3d tfToBase; // this is basically the [R|t] matrix
 		bool tfWasSet = false;
-		cv::Mat lastColorImage;
+		cv::Mat lastColorImage; // in the future could implement a fixed size buffer
 		bool colorImageWasSet = false;
-		cv::Mat lastDepthImage;
+		cv::Mat lastDepthImage; // same as the color image, could implement a buffer
 		bool depthImageWasSet = false;
-		Eigen::Matrix3d intrinsics;
+		Eigen::Matrix3d intrinsics; // the intrinsic matrix K
 		bool intrinsicsWasSet = false;
 
 	public:
@@ -32,7 +32,7 @@ class VideoStream {
 		Eigen::Matrix3d getIntrinsics();
 		void setIntrinsics(Eigen::Matrix3d K);
 
-		cv::Mat getLastTopView();
+		cv::Mat getLastTopView(); // get top view of the last color image
 };
 
 #endif
