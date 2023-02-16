@@ -12,20 +12,21 @@
 // each camera streams images
 // each camera is identified by its frame id
 // each frame id has an associated transformation matrix
+namespace fnr_slam {
+	class FNRSLAM {
 
-class FNRSLAM {
+		private:
+			std::shared_ptr<fnr_slam::Graph> graph = nullptr;
+			std::unordered_map<std::string,std::shared_ptr<fnr_slam::VideoStream>> streams; // keep a stream object for each frame id
 
-	private:
-		std::shared_ptr<Graph> graph = nullptr;
-		std::unordered_map<std::string,std::shared_ptr<VideoStream>> streams; // keep a stream object for each frame id
-
-	public:
-		FNRSLAM(time_t max_node_age);
-		~FNRSLAM();
-		void setCameraTf(std::string frame_id, Eigen::Affine3d tf);
-		void setCameraIntrinsics(std::string frame_id, Eigen::Matrix3d intrinsics);
-		void feedDepthImage(std::string frame_id, cv::Mat image);
-		void feedColorImage(std::string frame_id, cv::Mat image);
-};
+		public:
+			FNRSLAM(time_t max_node_age);
+			~FNRSLAM();
+			void setCameraTf(std::string frame_id, Eigen::Matrix<double, 3, 4> Rt);
+			void setCameraIntrinsics(std::string frame_id, Eigen::Matrix3d K);
+			void feedDepthImage(std::string frame_id, cv::Mat image);
+			void feedColorImage(std::string frame_id, cv::Mat image);
+	};
+}
 
 #endif

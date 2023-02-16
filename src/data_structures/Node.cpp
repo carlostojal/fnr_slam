@@ -1,21 +1,21 @@
 #include <fnr_slam/data_structures/Node.h>
 
-Node::Node() {
+fnr_slam::Node::Node() {
     this->timestamp = time(nullptr);
 }
 
-void Node::setTransformToPrev(Eigen::Affine3d tf) {
+void fnr_slam::Node::setTransformToPrev(Eigen::Affine3d tf) {
 	this->transformToPrev = tf;
 }
 
-Eigen::Affine3d Node::getTransformToPrev() {
+Eigen::Affine3d fnr_slam::Node::getTransformToPrev() {
 	return this->transformToPrev;
 }
 
-void Node::setTransformToStart(Eigen::Affine3d tf) {
+void fnr_slam::Node::setTransformToStart(Eigen::Affine3d tf) {
 	this->transformToStart = tf;
 }
 
-Eigen::Affine3d Node::getTransformToStart() {
+Eigen::Affine3d fnr_slam::Node::getTransformToStart() {
 	return this->transformToStart;
 }

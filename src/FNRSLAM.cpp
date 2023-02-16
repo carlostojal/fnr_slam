@@ -1,32 +1,32 @@
 #include <fnr_slam/FNRSLAM.h>
 
-FNRSLAM::FNRSLAM(time_t max_node_age) {
-	this->graph = std::make_shared<Graph>(max_node_age);
+fnr_slam::FNRSLAM::FNRSLAM(time_t max_node_age) {
+	this->graph = std::make_shared<fnr_slam::Graph>(max_node_age);
 }
 
-FNRSLAM::~FNRSLAM() {
+fnr_slam::FNRSLAM::~FNRSLAM() {
 }
 
-void FNRSLAM::setCameraTf(std::string frame_id, Eigen::Affine3d tf) {
+void fnr_slam::FNRSLAM::setCameraTf(std::string frame_id, Eigen::Matrix<double, 3, 4> Rt) {
 	if(this->streams[frame_id] == nullptr)
-		this->streams[frame_id] = std::make_shared<VideoStream>();
-	this->streams[frame_id]->setTfToBase(tf);
+		this->streams[frame_id] = std::make_shared<fnr_slam::VideoStream>();
+	this->streams[frame_id]->setExtrinsic(Rt);
 }
 
-void FNRSLAM::setCameraIntrinsics(std::string frame_id, Eigen::Matrix3d K) {
+void fnr_slam::FNRSLAM::setCameraIntrinsics(std::string frame_id, Eigen::Matrix3d K) {
 	if(this->streams[frame_id] == nullptr)
-		this->streams[frame_id] = std::make_shared<VideoStream>();
-	this->streams[frame_id]->setIntrinsics(K);
+		this->streams[frame_id] = std::make_shared<fnr_slam::VideoStream>();
+	this->streams[frame_id]->setIntrinsic(K);
 }
 
-void FNRSLAM::feedDepthImage(std::string frame_id, cv::Mat image) {
+void fnr_slam::FNRSLAM::feedDepthImage(std::string frame_id, cv::Mat image) {
 	if(this->streams[frame_id] == nullptr)
-		this->streams[frame_id] = std::make_shared<VideoStream>();
+		this->streams[frame_id] = std::make_shared<fnr_slam::VideoStream>();
 	this->streams[frame_id]->addDepthImage(image);
 }
 
-void FNRSLAM::feedColorImage(std::string frame_id, cv::Mat image) {
+void fnr_slam::FNRSLAM::feedColorImage(std::string frame_id, cv::Mat image) {
 	if(this->streams[frame_id] == nullptr)
-		this->streams[frame_id] = std::make_shared<VideoStream>();
+		this->streams[frame_id] = std::make_shared<fnr_slam::VideoStream>();
 	this->streams[frame_id]->addColorImage(image);
 }
